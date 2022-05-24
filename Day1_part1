@@ -1,0 +1,39 @@
+package day1;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Day1 {
+
+    public static void main(String[] args) throws FileNotFoundException {
+        //Indicar o caminho do ficheiro 
+        File file= new File("C:/Users/PTC_AppDev_Trainee/Downloads/inputs/day1_ficheiro.txt");
+        //Scanner serve para ler o que esta no ficheiro
+	    Scanner scann= new Scanner(file);
+        //Criar um contador para acomular o resultado final, tambem foi criado um array chamado "numeros" para poder ver os 2000 numeros
+	    int contador = 0;
+            int[] numeros= new int[2001]; //Linha 27(explicacao)
+            int i=0;
+	  //Este ciclo while consiste em ler o ficheiro ate ao final e guarda os valores de cada linha numa posicao do array 
+            while (scann.hasNextLine()){                
+                
+                int num1= Integer.parseInt(scann.nextLine());
+                numeros[i]=num1;
+                i+=1;
+            }
+            //Este ciclo for tem como objetivo comparar os numeros do array ate ao final
+            //Como o valor da variavel "a" comeca com um valor superior a "i" entao e necessario acrescentar um valor ao array , senao sai fora do limite do array
+            for (i = 0; i < 2000; i++) {
+                int a=i+1;
+            if (numeros[i]< numeros[a]){
+                contador+=1;
+            }
+            }
+            //Imprimir o valor final do contador
+           System.out.println(contador);
+            
+}       
+}
+
