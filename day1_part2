@@ -14,9 +14,9 @@ public class Day1_part2 {
         File file= new File("C:/Users/PTC_AppDev_Trainee/Downloads/inputs/day1_ficheiro.txt");
          //Scanner serve para ler o que esta no ficheiro
 	    Scanner scann= new Scanner(file);
-         //Criar um contador para acomular o resultado final
+         //Cria um contador para acomular o resultado final
          //Utilizar a variavel "i" para os ciclos
-         //Criar as variaveis "a" , "b" , "c" para servir de ponteiro
+         //Cria as variaveis "a" , "b" , "c" para servir de ponteiro
 	    int contador = 0;
             int[] numeros= new int[2002];
             int i=0;
