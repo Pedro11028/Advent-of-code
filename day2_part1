@@ -1,0 +1,62 @@
+package com.mycompany.day2_part1;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+
+public class Day2_part1 {
+
+    public static void main(String[] args) throws FileNotFoundException {
+        //Indicar o caminho do ficheiro 
+        File file= new File("C:/Users/Pedro Miguel/OneDrive/Ambiente de Trabalho/input/day2.txt");
+   //Scanner serve para ler o que esta no ficheiro          
+   Scanner scann= new Scanner(file);
+           //Cria um array do tipo string, e cria duas variáveis para guardar os respetivos valores, por fim é criado um integer para os ciclos while e for
+            String[] inst= new String[1000];
+            int profundidade = 0;
+            int horizontal = 0;
+            int i=0;
+           
+   //Este ciclo while consiste em ler o ficheiro ate ao final e guarda os valores de cada linha numa posicao do array 
+      while (scann.hasNextLine()){                
+               
+                inst[i]= scann.nextLine();
+                i+=1;
+            }
+
+     //Com estes ciclos percorremos todo o array
+     //Em seguida criamos um array do tipo char onde a cada posição corresponde uma letra ou espaço do que está no array "inst" na posição "i"
+     //Então em seguida verifica se existe a palavra forward na posição "i" do array "inst"
+     //Por ultimo percorre o array "chars" á procura de um número e se existir adiciona esse número á variável $horizontal$
+      for (i = 0; i < 1000; i++) {
+          char[] chars = inst[i].toCharArray();
+            if (inst[i].contains("forward")){
+                for(char c : chars){
+                  if(Character.isDigit(c)){
+                     horizontal +=Character.getNumericValue(c);
+                  }
+                }
+            }
+             if (inst[i].contains("down")){
+                for(char c : chars){
+                  if(Character.isDigit(c)){
+                     profundidade +=Character.getNumericValue(c);
+                  }
+                }  
+             }
+             //Neste caso se encontrar o número tira o valor desse número á varíavel "profundidade"
+             if (inst[i].contains("up")){
+                for(char c : chars){
+                  if(Character.isDigit(c)){
+                     profundidade -=Character.getNumericValue(c);                  
+                  }
+                }
+             }
+       }
+      //Calcula e apresenta o resultado final
+      horizontal= horizontal*profundidade;
+      System.out.println(horizontal);
+
+}
+}
