@@ -12,7 +12,7 @@ public class Day1 {
         File file= new File("C:/Users/PTC_AppDev_Trainee/Downloads/inputs/day1_ficheiro.txt");
         //Scanner serve para ler o que esta no ficheiro
 	    Scanner scann= new Scanner(file);
-        //Criar um contador para acomular o resultado final, tambem foi criado um array chamado "numeros" para poder ver os 2000 numeros
+        //Cria um contador para acomular o resultado final, tambem foi criado um array chamado "numeros" para poder ver os 2000 numeros
 	    int contador = 0;
             int[] numeros= new int[2001]; //Linha 27(explicacao)
             int i=0;
