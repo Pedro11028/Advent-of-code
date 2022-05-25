@@ -1,0 +1,75 @@
+package com.mycompany.day3_part1;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+
+public class Day3_part1 {
+
+    public static void main(String[] args) throws FileNotFoundException {
+        //Indicar o caminho do ficheiro 
+        File file= new File("C:/Users/Pedro/Desktop/input/day3.txt");
+       //Este Scanner serve para ler o conteudo do ficheiro 
+            Scanner scann= new Scanner(file);
+          
+            //Cria um array do tipo string usado para guardar os dados do ficheiro
+           //Cria dois arrays do tipo integer um para guardar os bits mais comuns e o outro para os menos comuns
+            String[] inst= new String[1000];
+            int[] contCumum = new int[12];
+            int[] contMenos = new int[12];
+            //Cria duas variaveis para os ciclos
+            int i= 0;
+            int a= 0;
+           
+      //Este ciclo while serve para inserir os dados do ficheiro na sua posição correspondente ao percorre-lo até o fim
+      while (scann.hasNextLine()){
+               
+                inst[i]= scann.nextLine();
+                i+=1;
+            }
+
+      //O ciclo for que se segue serve para percorrer o array que contám os dados do ficheiro
+      //O ciclo a seguir serve para ler a linha correspondente a posição "i"  e verificar se o número é igual a 1
+      //Se for então adiciona 1 á posição correspondente da linha "a" se não tira 1 valor
+       for (i = 0; i < 1000; i++){
+           
+            for (a = 0; a < 12; a++){
+                char[] chars = inst[i].toCharArray();
+               char c = chars[a];             
+                  if(Character.getNumericValue(c)==1){
+                      contCumum[a] +=1;
+                  }else{
+                      contCumum[a] -=1;
+                  }
+               }              
+       }
+     //Cria-se duas variaveis do tipo string uma para guardar o resultado dos valores mais comuns e a outra os menos comuns
+     //Tambem e criado uma variavel do tipo integer para guardar o resultado final
+     String num="";
+     String num2="";
+     int res=0;
+     
+     //O ultimo ciclo serve para verificar as posições das linhas
+     //Se o valor da posição for maior ou igual a 1 então a array que guarda os mais comuns guarda o valor 1 e o dos menos comuns guarda o valor 0
+     //Se o contrário guarda-se os valores de forma inversa
+     for(a = 0; a < 12; a++){
+         if(contCumum[a]>=1){
+            contCumum[a]=1;
+            contMenos[a]=0;
+         }else{
+            contCumum[a]=0;
+            contMenos[a]=1;
+         }
+         //Adiciona o valor dado as posições anteriormente as correspondentes variaveis
+         num += contCumum[a];
+         num2 += contMenos[a];
+         
+     }
+     //Converte os valores atribuidos e multiplica-os
+     //Apresenta o resultado obtido
+     res=Integer.parseInt(num,2)*Integer.parseInt(num2,2);
+     System.out.print(res);
+
+    }
+}
