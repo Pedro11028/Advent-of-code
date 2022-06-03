@@ -99,7 +99,6 @@ public class Day3_part2 {
                         } else {
                             par.contMenorOxygen += 1;
                         }        
-                }
                     
                     for (int i = 0; i < co2.size(); i++) {
                         char c = co2.get(i).charAt(numeroLinha);
@@ -111,3 +110,35 @@ public class Day3_part2 {
                 }
             }
         }
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------                }
+ Class ParString
+ package com.mycompany.day3_part2;
+
+/**
+ *
+ * @author Pedro
+ */
+public class ParString {
+        public String oxygenGeneratorRating;
+    public String co2ScrubberRating;
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Class Par
+package com.mycompany.day3_part2;
+
+/**
+ *
+ * @author Pedro
+ */
+public class Par {
+
+    public int contMaiorOxygen;
+    public int contMenorOxygen;
+    public int contMaiorCo2;
+    public int contMenorCo2;
+    
+    public Par() {
+    }
+    
+}
+
