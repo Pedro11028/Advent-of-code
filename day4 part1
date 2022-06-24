@@ -1,0 +1,204 @@
+package com.mycompany.day4_part1;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+public class Day4_part1 {
+
+    public static void main(String[] args) throws FileNotFoundException, IOException {
+
+        //Ler o ficheiro
+        List<String> linesInFile = Files.readAllLines(Paths.get("C:/Users/Pedro Oliveira/Desktop/input/day4.txt"));
+        // Criar um arraylist 2D
+        List<List<String>> cartoes = new ArrayList<>(linesInFile.size());
+
+        // Separar os valores do ficheiro com espaços
+        linesInFile.forEach(line -> {
+            // Recebe os valores de cada linha e guarda no array
+            String[] elements = line.split("\\s+");
+            cartoes.add(Arrays.asList(elements));
+        });
+
+        //Remove os numeros premiados do array dos cartões
+        cartoes.remove(0);
+
+        //Cria um arrayList para guardar os numeros que contêm os premeos
+        List<String> guardarNumeros = LerNumerosPremiados("C:/Users/Pedro Oliveira/Desktop/input/day4.txt");
+
+//Cria duas variáveis, as quais vou buscar á classe vencedor
+//O "GuardarUltimoNumero" serve para guardar o último número dos números vencedores
+//Já o cartao vencedor serve para guardar a primeira linha a ganhar no bingo assim obtendo também o cartão
+        vencedor GuardarUltimoNumero = new vencedor();
+        vencedor cartaoVencedor = new vencedor();
+        List<List<String>> cartoesVencedores = new ArrayList<>(linesInFile.size());
+//Os cartoes vencedores chamam a função "BuscarCartaoVencedor"- 
+        cartoesVencedores = BuscarCartaoVencedor(cartoes, guardarNumeros, cartaoVencedor, GuardarUltimoNumero);
+        
+//Depois de retornar os valores dos cartões chama a função "BuscarCartaoSorteado" para obter o cartão que foi sorteado
+        cartoesVencedores = BuscarCartaoSorteado(cartoes, cartaoVencedor);
+//Cria uma variável para efetuar os cálculos
+        int SomaNumeros = 0;
+//Percorre os cartões e verifica se os valores não têm -1 nem -2
+//Depois faz uma soma adicionando os valores
+        for (int i = 0; i < cartoesVencedores.size(); i++) {
+            for (int j = 0; j < cartoesVencedores.get(i).size(); j++) {
+                if (cartoesVencedores.get(i).get(j).equals("-1") || cartoesVencedores.get(i).get(j).equals("-2")) {
+                } else {
+                    SomaNumeros += Integer.parseInt(cartoesVencedores.get(i).get(j));
+                }
+            }
+        }
+//Multiplica a soma anterior pelo último Número a sair dos sorteados
+        SomaNumeros = SomaNumeros * Integer.parseInt(GuardarUltimoNumero.ultimoNumero);
+//Apresenta os resultados no ecrâ
+        cartoesVencedores.forEach(System.out::println);
+        //Mostra no ecra o array dos cartões e os numeros premiados.
+        System.out.println("----------------------------------------------------------------------");
+        System.out.println(cartoesVencedores);
+        System.out.println("Resultado final: " + SomaNumeros);
+
+    }
+
+    public static List<List<String>> BuscarCartaoVencedor(List<List<String>> cartoes, List<String> guardarNumeros, vencedor cartaoVencedor, vencedor GuardarUltimoNumero) {
+//Agora faz-se um ciclo para percorrer todos os números que podem sair no Bingo
+//Define a variávelcont cartao a 0 e depois percorre os cartões todos linha a inha e cria um contador para as linhas horizontais e verticais
+//Acrescenta mais 1 valor ao contador de cartões e Faz-se um ciclo para as colunas de cada linha percorrida
+        for (int i = 0; i < guardarNumeros.size(); i++) {
+            cartaoVencedor.contCartao = 0;
+            for (int x = 0; x < cartoes.size(); x++) {
+                int ContadorPremiadosH = 0;
+                int ContadorPremiadosV = 0;
+                cartaoVencedor.contCartao += 1;
+                for (int z = 0; z < cartoes.get(x).size(); z++) {
+//Guarda o valor do ultimo número a sair dos números a serem sorteados
+                    GuardarUltimoNumero.ultimoNumero = guardarNumeros.get(i);
+//Se o cartão na linha x coluna z tiver um espaço esse espaço é suvstituido por -1                    
+                    if (cartoes.get(x).get(z).equals(guardarNumeros.get(i))) {
+                        cartoes.get(x).set(z, "-1");
+                    }
+//Chama a função "BuscarContadorPremiadosH" para verificar se ouve ganhadores na Linha horizontal atual
+//Se sim retorna os cartoes com os valores "-1" com os números sorteados até agora
+                    ContadorPremiadosH = BuscarContadorPremiadosH(cartoes, ContadorPremiadosH, x, z);
+                    if (ContadorPremiadosH == 5) {
+                        return cartoes;
+                    }
+//Chama a função "BuscarContadorPremiadosV" para verificar se ouve ganhadores na Linha vertical atual
+//Se sim retorna os cartoes com os valores "-1" com os números sorteados até agora
+                    ContadorPremiadosV = BuscarContadorPremiadosV(cartoes, ContadorPremiadosV);
+                    if (ContadorPremiadosV == 5) {
+                        return cartoes;
+                    }
+                }
+            }
+        }
+        
+        return null;
+    }
+
+        public static int BuscarContadorPremiadosH(List<List<String>> cartoes, int ContadorPremiadosH, int x, int z) {
+//Se a linha tiver mais de 5 caracteres significa que tem um expaço em branco no inicio
+//Então se tivar 6 caracteres substitui esse espaço em branco na posição zero por -2
+//Se não for igual a zero então verifica se o valor da coluna é -1 se for então adiciona-se um valor á variável "ContadorPremiadosH"
+//Se a coluna na linha x não for igual a -1 a variável "ContadorPremiadosH" fica com valor 0
+        if (cartoes.get(x).size() == 6) {
+            cartoes.get(x).set(0, "-2");
+        } else if (cartoes.get(x).get(z).equals("-1")) {
+            ContadorPremiadosH += 1;
+        } else {
+            ContadorPremiadosH = 0;
+        }
+//retorna o valor da variável "ContadorPremiadosH"
+        return ContadorPremiadosH;
+    }
+    
+    public static int BuscarContadorPremiadosV(List<List<String>> cartoes, int ContadorPremiadosV) {
+//Com estes dois ciclos percorre todas as linhas dos cartoes e todas as colunas de todas as linhas
+        for (int j = 0; j < cartoes.size(); j++) {
+            for (int i = 0; i < cartoes.get(j).size(); i++) {
+//Verifica se a coluna tem um -2 se sim então verifica se a próxima coluna é -1
+//se a próxima coluna for -1 então verifica se o  "ContadorPremiadosV" é igual a 5 se for retorna o a variável senão acrescenta +1 a ela
+                if (cartoes.get(j).get(i).equals("-2")) {
+                    if (cartoes.get(j).get(i + 1).equals("-1")) {
+                        if (ContadorPremiadosV == 5) {
+                            return ContadorPremiadosV;
+                        } else {
+                            ContadorPremiadosV += 1;
+                        }
+                    }
+//Se a coluna não tem um -2 então verifica se o valor é -1 se for adiciona um valor ao "ContadorPremiadosV"
+//Se não então verifica se o "ContadorPremiadosV" é igual a 5 se nnão for o "ContadorPremiadosV" fica a zero
+                } else if (cartoes.get(j).get(i).equals("-1")) {
+                    ContadorPremiadosV += 1;
+                } else {
+                    if (ContadorPremiadosV == 5) {
+                        return ContadorPremiadosV;
+                    } else {
+                        ContadorPremiadosV = 0;
+                    }
+                }
+            }
+        }
+//retorna o "ContadorPremiadosV"
+        return ContadorPremiadosV;
+    }
+
+        public static List<List<String>> BuscarCartaoSorteado(List<List<String>> cartoes, vencedor cartaoVencedor) {
+//Como a matriz começa em zero precizamos remover um valor ao cartao vencedor
+//Cria uma matriz que vai guardar o cartao vencedor e guarda na variável "i" que vai ser utilizada nos ciclos para obter o cartão
+        int i = cartaoVencedor.contCartao - 1;
+        List<List<String>> output = new ArrayList<>();
+//Cria um ciclo for que vai diminuindo de posição linha a linha até enconntrar um espaço em branco pois os cartoes estão todos entre esses sespaços
+        for (i = i; i >= 0; i--) {
+            if (cartoes.get(i).get(0).equals("") == true) {
+                break;
+            }
+        }
+//Como a variável i está a apontar para o espaço em branco adicionamos 1 para voltar ao cartao
+        i += 1;
+//percorre o cartão e vai guardando as linhas para a frente até encontrar um espaço em branco
+        for (i = i; i <= cartoes.size() - 1; i++) {
+            if (cartoes.get(i).get(0).equals("") == true) {
+                break;
+            }
+            output.add(cartoes.get(i));
+        }
+//Retorna o cartão 
+        return output;
+    }
+    
+    public static List<String> LerNumerosPremiados(String filePath) throws FileNotFoundException {
+//Cria uma variável do tipo file para guardar o ficheiro
+//Cria um Scanner da variável  criada anteriormente file 
+        File file = new File(filePath);
+        Scanner scann = new Scanner(file);
+//Cria um arraylist para guardar os cartoes
+        ArrayList<String> leituraFicheiro = new ArrayList<String>();
+//Este ciclo while serve para ir guardando Linha a linha no arraylist
+        while (scann.hasNextLine()) {
+            leituraFicheiro.add(scann.nextLine());
+        }
+//Converte o array para matriz
+        List<String> output = new ArrayList<String>(Arrays.asList(leituraFicheiro.get(0).split(",")));
+//retorna os cartões
+        return output;
+    }
+}
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+Classe vencedor.java
+package com.mycompany.day4_part1;
+
+class vencedor {
+    String ultimoNumero="";
+    int contCartao=0;
+}
